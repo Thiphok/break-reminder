@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Break Reminder</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header class="header">
+            <div class="logo">Break Reminder</div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                <span id="statusText">พร้อมทำงาน</span>
+            </div>
+        </header>
+
+<section class="mode-selector">
+
+    <label for="modeSelect">Work Mode</label>
+
+    <div class="select-wrapper">
+
+    <select id="modeSelect">
+        <option value="gentle" selected>
+            Gentle Focus — 25/5
+        </option>
+
+        <option value="balanced">
+            Balanced Focus — 50/10
+        </option>
+
+        <option value="deep">
+            Deep Work — 75/15
+        </option>
+
+        <option value="flow">
+            Flow Mode — Flexible
+        </option>
+
+        <option value="custom">
+            Custom — ตั้งเอง
+        </option>
+
+    </select>
+
+    <span class="select-arrow">▾</span>
+
+</div>
+
+
+    <div id="customSettings" class="custom-settings">
+
+        <div>
+            <label for="customWork">เวลาทำงาน (นาที)</label>
+
+            <input
+                id="customWork"
+                type="number"
+                min="1"
+                max="180"
+                value="50"
+            >
+        </div>
+
+        <div>
+            <label for="customBreak">เวลาพัก (นาที)</label>
+
+            <input
+                id="customBreak"
+                type="number"
+                min="1"
+                max="60"
+                value="10"
+            >
+        </div>
+
+        <button id="applyCustom" type="button">
+            ใช้เวลานี้
+        </button>
+
+    </div>
+
+</section>
+        <main class="main">
+
+            <div class="label" id="modeLabel">
+                WORK SESSION
+            </div>
+
+            <div class="timer" id="timer">
+                00:10
+            </div>
+
+            <p class="description" id="description">
+                ทำงานอย่างมีสมาธิ แล้วอย่าลืมพักเป็นระยะ
+            </p>
+
+            <button id="mainButton" class="main-button">
+                เริ่มทำงาน
+            </button>
+
+        </main>
+
+
+        <section class="stats">
+
+            <div class="stat">
+                <span>รอบการทำงาน</span>
+                <strong id="sessionCount">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>เวลาพัก</span>
+                <strong id="breakDuration">10 นาที</strong>
+            </div>
+
+            <div class="stat">
+                <span>สถานะ</span>
+                <strong id="sessionStatus">ยังไม่เริ่ม</strong>
+            </div>
+
+        </section>
+
+
+        <!-- Soft break notification -->
+<div id="breakNudge" class="break-nudge">
+
+    <div class="nudge-top">
+        <span class="nudge-dot"></span>
+        <span>Break Reminder</span>
+    </div>
+
+    <h3>ถึงเวลาพักแล้ว</h3>
+
+    <p>
+        คุณทำงานต่อเนื่องมาสักระยะแล้ว<br>
+        พักสั้น ๆ ก่อนกลับไปทำงานต่อไหม?
+    </p>
+
+    <div class="nudge-actions">
+
+        <button id="breathingBtn" class="nudge-primary">
+            พักหายใจ
+        </button>
+
+        <button id="laterBtn" class="nudge-secondary">
+            ไว้ก่อน
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Break experience -->
+<div id="breakOverlay" class="break-overlay">
+
+    <!-- REST TYPE -->
+    <div id="restChoice" class="break-screen">
+
+        <div class="break-label">
+            TIME TO REST
+        </div>
+
+        <h2>เลือกวิธีพัก</h2>
+
+        <p class="break-description">
+            เลือกรูปแบบการพักที่เหมาะกับคุณ
+        </p>
+
+
+        <div class="rest-options">
+
+            <button id="openBreathing" class="rest-option">
+
+                <div class="rest-icon">◌</div>
+
+                <div>
+                    <strong>พักหายใจ</strong>
+
+                    <span>
+                        เลือกจังหวะการหายใจและทำตาม
+                    </span>
+                </div>
+
+            </button>
+
+
+            <button class="rest-option disabled" type="button">
+
+                <div class="rest-icon">◯</div>
+
+                <div>
+                    <strong>พักสายตา</strong>
+
+                    <span>
+                        กำลังพัฒนา
+                    </span>
+                </div>
+
+            </button>
+
+
+            <button class="rest-option disabled" type="button">
+
+                <div class="rest-icon">—</div>
+
+                <div>
+                    <strong>พักแบบเงียบ</strong>
+
+                    <span>
+                        กำลังพัฒนา
+                    </span>
+                </div>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- BREATHING SELECTION -->
+    <div id="breathingChoice" class="break-screen hidden">
+
+        <div class="break-label">
+            BREATHING
+        </div>
+
+        <h2>เลือกรูปแบบการหายใจ</h2>
+
+        <p class="break-description">
+            เลือกจังหวะที่คุณรู้สึกสบาย
+        </p>
+
+
+        <div class="breathing-options">
+
+            <button class="breathing-option" data-pattern="natural">
+                <strong>Natural Breathing</strong>
+                <span>หายใจตามธรรมชาติ</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="equal">
+                <strong>Equal Breathing</strong>
+                <span>เข้า 4 • ออก 4</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="extended">
+                <strong>Extended Exhale</strong>
+                <span>เข้า 4 • ออก 6</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="coherent">
+                <strong>Coherent Breathing</strong>
+                <span>เข้า 5 • ออก 5</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="box">
+                <strong>Box Breathing</strong>
+                <span>เข้า 4 • กลั้น 4 • ออก 4 • กลั้น 4</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="sigh">
+                <strong>Physiological Sigh</strong>
+                <span>เข้า 2 ครั้ง • ออกยาว</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="energizing">
+                <strong>Energizing Breath</strong>
+                <span>เข้า 4 • ออก 3</span>
+            </button>
+
+            <button class="breathing-option" data-pattern="longExhale">
+                <strong>Long Exhale Rest</strong>
+                <span>เข้า 3 • ออก 6</span>
+            </button>
+
+        </div>
+
+
+        <button id="backToRest" class="text-button">
+            ← กลับ
+        </button>
+
+    </div>
+
+
+    <!-- BREATHING GUIDE -->
+    <div id="breathingGuide" class="break-screen hidden">
+
+        <div class="break-label" id="breathingPatternName">
+            BREATHING
+        </div>
+
+        <h2 id="breathingInstruction">
+            หายใจเข้า
+        </h2>
+
+        <div id="breathOrb" class="breath-orb">
+            <span></span>
+        </div>
+
+        <div id="breathingPhase" class="breathing-phase">
+            04
+        </div>
+
+        <p id="breathingHint" class="breathing-hint">
+            ค่อย ๆ หายใจเข้า
+        </p>
+
+        <div id="breathingCycle" class="breathing-cycle">
+            รอบที่ 1
+        </div>
+
+        <div id="breathingRemaining" class="breathing-remaining">
+            พักเหลือ 00:30
+        </div>
+
+        <div class="breathing-actions">
+
+            <button id="finishBreathing" class="nudge-primary">
+                จบการพัก
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
